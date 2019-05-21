@@ -2,22 +2,25 @@ package faker
 
 import (
 	"fmt"
-	"github.com/spf13/cast"
 	"math/rand"
 	"reflect"
 	"strings"
+
+	"github.com/spf13/cast"
 )
 
+// Enumer defines the interface of enum value generator
 type Enumer interface {
-	Gen(v reflect.Value, tag FakerTag) (interface{}, error)
+	Gen(v reflect.Value, tag Tag) (interface{}, error)
 }
 
 var enumer Enumer
 
+// EnumImpl defines the struct
 type EnumImpl struct {
 }
 
-// GetPrice returns a new Money interface of Price struct
+// GetEnum returns a new Enumer interface of EnumImpl struct
 func GetEnum() Enumer {
 	mu.Lock()
 	defer mu.Unlock()
@@ -28,7 +31,8 @@ func GetEnum() Enumer {
 	return enumer
 }
 
-func (r EnumImpl) Gen(v reflect.Value, tag FakerTag) (interface{}, error) {
+// Gen generates an enum value specified in the field tag.
+func (r EnumImpl) Gen(v reflect.Value, tag Tag) (interface{}, error) {
 	enums := tag.Opts["enum"]
 	values := strings.SplitN(enums, "/", -1)
 	i := rand.Intn(len(values))

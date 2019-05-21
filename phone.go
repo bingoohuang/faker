@@ -43,6 +43,7 @@ func (p Phone) phonenumber() string {
 	return fmt.Sprintf("%s-%s-%s", str[:3], str[3:6], str[6:10])
 }
 
+// ChinaMobileNumber generates a China mobile number like 13812345678.
 func (p Phone) ChinaMobileNumber(v reflect.Value) (interface{}, error) {
 	randInt := randomStringNumber(10)
 	return fmt.Sprintf("1%s", randInt), nil

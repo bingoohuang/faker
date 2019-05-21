@@ -31,7 +31,7 @@ func CustomGenerator() {
 		return obj, nil
 	})
 	
-	faker.AddProviderV2("bingoo", func(v reflect.Value, tag FakerTag) (interface{}, error) {
+	faker.AddProviderV2("bingoo", func(v reflect.Value, tag Tag) (interface{}, error) {
     		return "size:" + tag.Opts["size"], nil
     })
 }

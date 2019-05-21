@@ -141,7 +141,9 @@ var defaultTag = map[string]string{
 // This type also can be used for custom provider.
 type TaggedFunction func(v reflect.Value) (interface{}, error)
 
-type TaggedFunctionV2 func(v reflect.Value, tag FakerTag) (interface{}, error)
+// TaggedFunctionV2 used as the standard layout function for tag providers in struct.
+// This type also can be used for custom provider.
+type TaggedFunctionV2 func(v reflect.Value, tag Tag) (interface{}, error)
 
 var mapperTag = map[string]interface{}{
 	EmailTag:              GetNetworker().Email,
@@ -332,6 +334,8 @@ func AddProvider(tag string, provider TaggedFunction) error {
 	return nil
 }
 
+// AddProviderV2 extend faker with tag to generate fake data with specified custom algoritm.
+// It is similar to AddProvider but with a differnt provider type.
 func AddProviderV2(tag string, provider TaggedFunctionV2) error {
 	if _, ok := mapperTag[tag]; ok {
 		return errors.New(ErrTagAlreadyExists)
@@ -499,7 +503,7 @@ func isZero(field reflect.Value) (bool, error) {
 	return reflect.Zero(field.Type()).Interface() == field.Interface(), nil
 }
 
-func decodeTags(typ reflect.Type, i int) FakerTag {
+func decodeTags(typ reflect.Type, i int) Tag {
 	field := typ.Field(i)
 	rawTag := field.Tag.Get(tagName)
 	tags := strings.Split(rawTag, ",")
@@ -536,7 +540,7 @@ func decodeTags(typ reflect.Type, i int) FakerTag {
 		mapper = "none"
 	}
 
-	return FakerTag{
+	return Tag{
 		RawTag:       rawTag,
 		FieldName:    field.Name,
 		Type:         field.Type,
@@ -546,7 +550,8 @@ func decodeTags(typ reflect.Type, i int) FakerTag {
 	}
 }
 
-type FakerTag struct {
+// Tag represents tag of faker related to the struct field
+type Tag struct {
 	Type         reflect.Type
 	FieldName    string
 	RawTag       string
@@ -555,7 +560,7 @@ type FakerTag struct {
 	KeepOriginal bool
 }
 
-func invoke(mapperFn interface{}, v reflect.Value, tag FakerTag) (interface{}, error) {
+func invoke(mapperFn interface{}, v reflect.Value, tag Tag) (interface{}, error) {
 	fnValue := reflect.ValueOf(mapperFn)
 	var args []reflect.Value
 	switch fnValue.Type().NumIn() {
@@ -577,7 +582,7 @@ func invoke(mapperFn interface{}, v reflect.Value, tag FakerTag) (interface{}, e
 	return data, err.(error)
 }
 
-func setDataWithTag(v reflect.Value, tag FakerTag) error {
+func setDataWithTag(v reflect.Value, tag Tag) error {
 	if v.Kind() != reflect.Ptr {
 		return errors.New(ErrValueNotPtr)
 	}
@@ -630,7 +635,7 @@ func setDataWithTag(v reflect.Value, tag FakerTag) error {
 	return nil
 }
 
-func userDefinedMap(v reflect.Value, tag FakerTag) error {
+func userDefinedMap(v reflect.Value, tag Tag) error {
 	len := randomSliceAndMapSize()
 	if shouldSetNil && len == 0 {
 		v.Set(reflect.Zero(v.Type()))
@@ -652,7 +657,7 @@ func userDefinedMap(v reflect.Value, tag FakerTag) error {
 	return nil
 }
 
-func getValueWithTag(t reflect.Type, tag FakerTag) (interface{}, error) {
+func getValueWithTag(t reflect.Type, tag Tag) (interface{}, error) {
 	switch t.Kind() {
 	case reflect.Int, reflect.Int32, reflect.Int64, reflect.Int8, reflect.Int16, reflect.Uint, reflect.Uint8,
 		reflect.Uint16, reflect.Uint32, reflect.Uint64:
@@ -672,7 +677,7 @@ func getValueWithTag(t reflect.Type, tag FakerTag) (interface{}, error) {
 	}
 }
 
-func userDefinedArray(v reflect.Value, tag FakerTag) error {
+func userDefinedArray(v reflect.Value, tag Tag) error {
 	len := randomSliceAndMapSize()
 	if shouldSetNil && len == 0 {
 		v.Set(reflect.Zero(v.Type()))
@@ -690,7 +695,7 @@ func userDefinedArray(v reflect.Value, tag FakerTag) error {
 	return nil
 }
 
-func userDefinedString(v reflect.Value, tag FakerTag) error {
+func userDefinedString(v reflect.Value, tag Tag) error {
 	var res interface{}
 	var err error
 
@@ -713,7 +718,7 @@ func userDefinedString(v reflect.Value, tag FakerTag) error {
 	return nil
 }
 
-func userDefinedNumber(v reflect.Value, tag FakerTag) error {
+func userDefinedNumber(v reflect.Value, tag Tag) error {
 	var res interface{}
 	var err error
 
@@ -736,7 +741,7 @@ func userDefinedNumber(v reflect.Value, tag FakerTag) error {
 	return nil
 }
 
-func extractStringFromTag(tag FakerTag) (interface{}, error) {
+func extractStringFromTag(tag Tag) (interface{}, error) {
 	if fn, ok := mapperTag[tag.Mapper]; ok {
 		res, err := invoke(fn, reflect.ValueOf(nil), tag)
 		return res, err
@@ -753,13 +758,13 @@ func extractStringFromTag(tag FakerTag) (interface{}, error) {
 	return res, nil
 }
 
-func extractNumberFromTag(fakerTag FakerTag, t reflect.Type) (interface{}, error) {
-	if fn, ok := mapperTag[fakerTag.Mapper]; ok {
-		res, err := invoke(fn, reflect.New(t), fakerTag)
+func extractNumberFromTag(Tag Tag, t reflect.Type) (interface{}, error) {
+	if fn, ok := mapperTag[Tag.Mapper]; ok {
+		res, err := invoke(fn, reflect.New(t), Tag)
 		return res, err
 	}
 
-	tag := fakerTag.RawTag
+	tag := Tag.RawTag
 	if !(strings.Contains(tag, BoundaryStart) && strings.Contains(tag, BoundaryEnd)) {
 		return nil, errors.New(ErrTagNotSupported)
 	}

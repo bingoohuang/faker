@@ -1,22 +1,24 @@
 package faker
 
 import (
-	"github.com/lucasjones/reggen"
 	"reflect"
 	"strconv"
+
+	"github.com/lucasjones/reggen"
 )
 
-// Regex struct
+// Regexer interface
 type Regexer interface {
-	Gen(v reflect.Value, tag FakerTag) (interface{}, error)
+	Gen(v reflect.Value, tag Tag) (interface{}, error)
 }
 
 var regexer Regexer
 
+// RegexImpl struct
 type RegexImpl struct {
 }
 
-// GetPrice returns a new Money interface of Price struct
+// GetRegex returns a new Regexer interface of RegexImpl struct
 func GetRegex() Regexer {
 	mu.Lock()
 	defer mu.Unlock()
@@ -27,7 +29,8 @@ func GetRegex() Regexer {
 	return regexer
 }
 
-func (r RegexImpl) Gen(v reflect.Value, tag FakerTag) (interface{}, error) {
+// Gen returns the fake value the matches the regex
+func (r RegexImpl) Gen(v reflect.Value, tag Tag) (interface{}, error) {
 	len := 64
 	if l, ok := tag.Opts["len"]; ok {
 		len, _ = strconv.Atoi(l)

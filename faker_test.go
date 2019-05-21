@@ -2,11 +2,12 @@ package faker
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -558,7 +559,7 @@ func validateRange(value int) error {
 
 func TestSetDataWithTagIfFirstArgumentNotPtr(t *testing.T) {
 	temp := struct{}{}
-	tag := FakerTag{}
+	tag := Tag{}
 	if setDataWithTag(reflect.ValueOf(temp), tag).Error() != "Not a pointer value" {
 		t.Error("Expected in arguments not ptr")
 	}
@@ -604,7 +605,7 @@ func TestRandomIntOnlySecondParameters(t *testing.T) {
 func TestRandomIntOnlyError(t *testing.T) {
 	arguments := []int{1, 3, 4, 5, 6}
 	_, err := RandomInt(arguments...)
-	if err == nil && err.Error() == fmt.Errorf(ErrMoreArguments, len(arguments)).Error() {
+	if err == nil || err.Error() != fmt.Errorf(ErrMoreArguments, len(arguments)).Error() {
 		t.Error("Expected error from function RandomInt")
 	}
 }
@@ -763,7 +764,7 @@ func TestExtend(t *testing.T) {
 			t.Error("Expected Not Error, But Got: ", err)
 		}
 
-		if err := AddProviderV2("bingoo", func(v reflect.Value, tag FakerTag) (interface{}, error) {
+		if err := AddProviderV2("bingoo", func(v reflect.Value, tag Tag) (interface{}, error) {
 			return "bingoo" + tag.Opts["k"], nil
 		}); err != nil {
 			t.Error("Expected Not Error, But Got: ", err)
