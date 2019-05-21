@@ -7,7 +7,7 @@ import (
 )
 
 func TestPhoneNumber(t *testing.T) {
-	ph, err := GetPhoner().PhoneNumber(reflect.Value{})
+	ph, err := phone.PhoneNumber(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -17,7 +17,7 @@ func TestPhoneNumber(t *testing.T) {
 }
 
 func TestTollFreePhoneNumber(t *testing.T) {
-	ph, err := GetPhoner().TollFreePhoneNumber(reflect.Value{})
+	ph, err := phone.TollFreePhoneNumber(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -27,7 +27,7 @@ func TestTollFreePhoneNumber(t *testing.T) {
 }
 
 func TestE164PhoneNumber(t *testing.T) {
-	ph, err := GetPhoner().E164PhoneNumber(reflect.Value{})
+	ph, err := phone.E164PhoneNumber(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}

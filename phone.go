@@ -7,18 +7,7 @@ import (
 	"strings"
 )
 
-var phone Phoner
-
-// GetPhoner serves as a constructor for Phoner interface
-func GetPhoner() Phoner {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if phone == nil {
-		phone = &Phone{}
-	}
-	return phone
-}
+var phone Phoner = &Phone{}
 
 // SetPhoner sets custom Phoner
 func SetPhoner(p Phoner) {
@@ -38,7 +27,7 @@ type Phone struct {
 }
 
 func (p Phone) phonenumber() string {
-	randInt, _ := RandomInt(1, 10)
+	randInt := RandomInt(1, 10)
 	str := strings.Join(IntToString(randInt), "")
 	return fmt.Sprintf("%s-%s-%s", str[:3], str[3:6], str[6:10])
 }
@@ -64,7 +53,7 @@ func (p Phone) tollfreephonenumber() string {
 	out := ""
 	boxDigitsStart := []string{"777", "888"}
 
-	ints, _ := RandomInt(1, 9)
+	ints := RandomInt(1, 9)
 	for index, v := range IntToString(ints) {
 		if index == 3 {
 			out += "-"
@@ -88,7 +77,7 @@ func TollFreePhoneNumber() string {
 func (p Phone) e164PhoneNumber() string {
 	out := ""
 	boxDigitsStart := []string{"7", "8"}
-	ints, _ := RandomInt(1, 10)
+	ints := RandomInt(1, 10)
 
 	for _, v := range IntToString(ints) {
 		out += v

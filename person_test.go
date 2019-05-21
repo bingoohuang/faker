@@ -10,7 +10,7 @@ func TestSetDowser(t *testing.T) {
 }
 
 func TestTitleMale(t *testing.T) {
-	male, err := GetPerson().TitleMale(reflect.Value{})
+	male, err := person.TitleMale(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -20,7 +20,7 @@ func TestTitleMale(t *testing.T) {
 }
 
 func TestTitleFemale(t *testing.T) {
-	female, err := GetPerson().TitleFeMale(reflect.Value{})
+	female, err := person.TitleFeMale(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -30,7 +30,7 @@ func TestTitleFemale(t *testing.T) {
 }
 
 func TestFirstNameMale(t *testing.T) {
-	firstName, err := GetPerson().FirstNameMale(reflect.Value{})
+	firstName, err := person.FirstNameMale(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -40,7 +40,7 @@ func TestFirstNameMale(t *testing.T) {
 }
 
 func TestFirstNameFemale(t *testing.T) {
-	firstName, err := GetPerson().FirstNameFemale(reflect.Value{})
+	firstName, err := person.FirstNameFemale(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -50,7 +50,7 @@ func TestFirstNameFemale(t *testing.T) {
 }
 
 func TestFirstName(t *testing.T) {
-	firstname, err := GetPerson().FirstName(reflect.Value{})
+	firstname, err := person.FirstName(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -60,7 +60,7 @@ func TestFirstName(t *testing.T) {
 }
 
 func TestLastName(t *testing.T) {
-	lastname, err := GetPerson().LastName(reflect.Value{})
+	lastname, err := person.LastName(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -70,7 +70,7 @@ func TestLastName(t *testing.T) {
 }
 
 func TestNameMale(t *testing.T) {
-	name, err := GetPerson().Name(reflect.Value{})
+	name, err := person.Name(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -80,7 +80,7 @@ func TestNameMale(t *testing.T) {
 	}
 }
 func TestNameFemale(t *testing.T) {
-	name, err := GetPerson().Name(reflect.Value{})
+	name, err := person.Name(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}

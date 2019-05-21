@@ -11,7 +11,7 @@ func TestSetPrice(t *testing.T) {
 }
 
 func TestCurrency(t *testing.T) {
-	p, err := GetPrice().Currency(reflect.Value{})
+	p, err := pri.Currency(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -21,7 +21,7 @@ func TestCurrency(t *testing.T) {
 }
 
 func TestAmountWithCurrency(t *testing.T) {
-	p, err := GetPrice().AmountWithCurrency(reflect.Value{})
+	p, err := pri.AmountWithCurrency(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}

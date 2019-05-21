@@ -620,18 +620,7 @@ type DateTimer interface {
 	TimePeriod(v reflect.Value) (interface{}, error)
 }
 
-var date DateTimer
-
-// GetDateTimer returns a new DateTimer interface of DateTime
-func GetDateTimer() DateTimer {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if date == nil {
-		date = &DateTime{}
-	}
-	return date
-}
+var date DateTimer = &DateTime{}
 
 // SetDateTimer sets custom date time
 func SetDateTimer(d DateTimer) {

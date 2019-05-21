@@ -17,7 +17,7 @@ type Dowser interface {
 	Name(v reflect.Value) (interface{}, error)
 }
 
-var person Dowser
+var person Dowser = &Person{}
 var titlesMale = []string{
 	"Mr.", "Dr.", "Prof.", "Lord", "King", "Prince",
 }
@@ -107,17 +107,6 @@ var lastNames = []string{
 	"Yost", "Yundt", "Zboncak", "Zemlak", "Ziemann", "Zieme", "Zulauf",
 }
 var randNameFlag = rand.Intn(100)
-
-// GetPerson returns a new Dowser interface of Person struct
-func GetPerson() Dowser {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if person == nil {
-		person = &Person{}
-	}
-	return person
-}
 
 // SetDowser sets custom Dowsers of Person names
 func SetDowser(d Dowser) {

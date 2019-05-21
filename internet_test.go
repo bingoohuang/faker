@@ -7,7 +7,7 @@ import (
 )
 
 func TestEmail(t *testing.T) {
-	email, err := GetNetworker().Email(reflect.Value{})
+	email, err := internet.Email(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -27,7 +27,7 @@ func TestMacAddress(t *testing.T) {
 	}
 }
 func TestDomainName(t *testing.T) {
-	domain, err := GetNetworker().DomainName(reflect.Value{})
+	domain, err := internet.DomainName(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -41,7 +41,7 @@ func TestDomainName(t *testing.T) {
 func TestURLOneVerbs(t *testing.T) {
 	urlFormats = []string{
 		"http://www.%s/"}
-	res, err := GetNetworker().URL(reflect.Value{})
+	res, err := internet.URL(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -52,7 +52,7 @@ func TestURLOneVerbs(t *testing.T) {
 func TestURLTwoVerbs(t *testing.T) {
 	urlFormats = []string{
 		"http://www.%s/%s"}
-	res, err := GetNetworker().URL(reflect.Value{})
+	res, err := internet.URL(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -61,7 +61,7 @@ func TestURLTwoVerbs(t *testing.T) {
 	}
 }
 func TestUserName(t *testing.T) {
-	usrname, err := GetNetworker().UserName(reflect.Value{})
+	usrname, err := internet.UserName(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -71,7 +71,7 @@ func TestUserName(t *testing.T) {
 
 }
 func TestIPv4(t *testing.T) {
-	ip, err := GetNetworker().IPv4(reflect.Value{})
+	ip, err := internet.IPv4(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -80,7 +80,7 @@ func TestIPv4(t *testing.T) {
 	}
 }
 func TestIPv6(t *testing.T) {
-	ip, err := GetNetworker().IPv6(reflect.Value{})
+	ip, err := internet.IPv6(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}
@@ -94,7 +94,7 @@ func TestSetNetwork(t *testing.T) {
 }
 
 func TestPassword(t *testing.T) {
-	pass, err := GetNetworker().Password(reflect.Value{})
+	pass, err := internet.Password(reflect.Value{})
 	if err != nil {
 		t.Error("Expected  not error, got err", err)
 	}

@@ -23,18 +23,7 @@ var urlFormats = []string{
 	"http://%s/%s.php",
 	"https://%s/%s.php",
 }
-var internet Networker
-
-// GetNetworker returns a new Networker interface of Internet
-func GetNetworker() Networker {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if internet == nil {
-		internet = &Internet{}
-	}
-	return internet
-}
+var internet Networker = &Internet{}
 
 // SetNetwork sets custom Network
 func SetNetwork(net Networker) {

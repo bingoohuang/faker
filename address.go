@@ -5,18 +5,7 @@ import (
 	"reflect"
 )
 
-var address Addresser
-
-// GetAddress returns a new Addresser interface of Address
-func GetAddress() Addresser {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if address == nil {
-		address = &Address{}
-	}
-	return address
-}
+var address Addresser = &Address{}
 
 // SetAddress sets custom Address
 func SetAddress(net Addresser) {

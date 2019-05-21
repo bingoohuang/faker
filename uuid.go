@@ -7,18 +7,7 @@ import (
 	"reflect"
 )
 
-var identifier Identifier
-
-// GetIdentifier returns a new Identifier
-func GetIdentifier() Identifier {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if identifier == nil {
-		identifier = &UUID{}
-	}
-	return identifier
-}
+var identifier Identifier = &UUID{}
 
 // Identifier ...
 type Identifier interface {

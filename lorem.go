@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var lorem DataFaker
+var lorem DataFaker = &Lorem{}
 var wordList = []string{
 	"alias", "consequatur", "aut", "perferendis", "sit", "voluptatem",
 	"accusantium", "doloremque", "aperiam", "eaque", "ipsa", "quae", "ab",
@@ -60,17 +60,6 @@ func SetDataFaker(d DataFaker) {
 	lorem = d
 }
 
-// GetLorem returns a new DataFaker interface of Lorem struct
-func GetLorem() DataFaker {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if lorem == nil {
-		lorem = &Lorem{}
-	}
-	return lorem
-}
-
 // Lorem struct
 type Lorem struct {
 }
@@ -92,7 +81,7 @@ func Word() string {
 
 func (l Lorem) sentence() string {
 	sentence := ""
-	r, _ := RandomInt(1, 6)
+	r := RandomInt(1, 6)
 	size := len(r)
 	for key, val := range r {
 		if key == 0 {

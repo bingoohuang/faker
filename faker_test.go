@@ -585,28 +585,12 @@ func BenchmarkFakerDataTagged(b *testing.B) {
 	}
 }
 
-func TestRandomIntOnlyFirstParameter(t *testing.T) {
-	r := rand.Intn(100)
-	res, _ := RandomInt(r)
-	if len(res) != r {
-		t.Error("It is expected that the refund amount is equal to the argument (RandomInt)")
-	}
-}
-
 func TestRandomIntOnlySecondParameters(t *testing.T) {
 	first := rand.Intn(50)
 	second := rand.Intn(100) + first
-	res, _ := RandomInt(first, second)
+	res := RandomInt(first, second)
 	if len(res) != (second - first + 1) {
 		t.Error("It is expected that the refund amount is equal to the argument (RandomInt)")
-	}
-}
-
-func TestRandomIntOnlyError(t *testing.T) {
-	arguments := []int{1, 3, 4, 5, 6}
-	_, err := RandomInt(arguments...)
-	if err == nil || err.Error() != fmt.Errorf(ErrMoreArguments, len(arguments)).Error() {
-		t.Error("Expected error from function RandomInt")
 	}
 }
 
@@ -824,7 +808,6 @@ func TestTagAlreadyExists(t *testing.T) {
 }
 
 func TestTagWithPointer(t *testing.T) {
-
 	type TestStruct struct {
 		FirstName  *string  `json:"first_name,omitempty" faker:"first_name_male"`
 		Email      *string  `json:"email,omitempty" faker:"email"`

@@ -9,12 +9,10 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
 var (
-	mu = &sync.Mutex{}
 	// Sets nil if the value type is struct or map and the size of it equals to zero.
 	shouldSetNil = false
 	//Sets random integer generation to zero for slice and maps
@@ -35,12 +33,13 @@ type numberBoundary struct {
 
 // Supported tags
 const (
-	letterIdxBits         = 6                    // 6 bits to represent a letter index
-	letterIdxMask         = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
-	letterIdxMax          = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
-	letterBytes           = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	tagName               = "faker"
-	keep                  = "keep"
+	letterIdxBits = 6                    // 6 bits to represent a letter index
+	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+	letterBytes   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	tagName       = "faker"
+	keep          = "keep"
+
 	ID                    = "uuid_digit"
 	HyphenatedID          = "uuid_hyphenated"
 	Regex                 = "regex"
@@ -93,50 +92,6 @@ const (
 	comma                 = ","
 )
 
-var defaultTag = map[string]string{
-	EmailTag:              EmailTag,
-	MacAddressTag:         MacAddressTag,
-	DomainNameTag:         DomainNameTag,
-	URLTag:                URLTag,
-	UserNameTag:           UserNameTag,
-	IPV4Tag:               IPV4Tag,
-	IPV6Tag:               IPV6Tag,
-	PASSWORD:              PASSWORD,
-	CreditCardType:        CreditCardType,
-	CreditCardNumber:      CreditCardNumber,
-	LATITUDE:              LATITUDE,
-	LONGITUDE:             LONGITUDE,
-	PhoneNumber:           PhoneNumber,
-	TollFreeNumber:        TollFreeNumber,
-	E164PhoneNumberTag:    E164PhoneNumberTag,
-	TitleMaleTag:          TitleMaleTag,
-	TitleFemaleTag:        TitleFemaleTag,
-	FirstNameTag:          FirstNameTag,
-	FirstNameMaleTag:      FirstNameMaleTag,
-	FirstNameFemaleTag:    FirstNameFemaleTag,
-	LastNameTag:           LastNameTag,
-	NAME:                  NAME,
-	UnixTimeTag:           UnixTimeTag,
-	DATE:                  DATE,
-	TIME:                  TimeFormat,
-	MonthNameTag:          MonthNameTag,
-	YEAR:                  YearFormat,
-	DayOfWeekTag:          DayOfWeekTag,
-	DayOfMonthTag:         DayOfMonthFormat,
-	TIMESTAMP:             TIMESTAMP,
-	CENTURY:               CENTURY,
-	TIMEZONE:              TIMEZONE,
-	TimePeriodTag:         TimePeriodFormat,
-	WORD:                  WORD,
-	SENTENCE:              SENTENCE,
-	PARAGRAPH:             PARAGRAPH,
-	CurrencyTag:           CurrencyTag,
-	AmountTag:             AmountTag,
-	AmountWithCurrencyTag: AmountWithCurrencyTag,
-	ID:                    ID,
-	HyphenatedID:          HyphenatedID,
-}
-
 // TaggedFunction used as the standard layout function for tag providers in struct.
 // This type also can be used for custom provider.
 type TaggedFunction func(v reflect.Value) (interface{}, error)
@@ -146,67 +101,61 @@ type TaggedFunction func(v reflect.Value) (interface{}, error)
 type TaggedFunctionV2 func(v reflect.Value, tag Tag) (interface{}, error)
 
 var mapperTag = map[string]interface{}{
-	EmailTag:              GetNetworker().Email,
-	MacAddressTag:         GetNetworker().MacAddress,
-	DomainNameTag:         GetNetworker().DomainName,
-	URLTag:                GetNetworker().URL,
-	UserNameTag:           GetNetworker().UserName,
-	IPV4Tag:               GetNetworker().IPv4,
-	IPV6Tag:               GetNetworker().IPv6,
-	PASSWORD:              GetNetworker().Password,
-	CreditCardType:        GetPayment().CreditCardType,
-	CreditCardNumber:      GetPayment().CreditCardNumber,
-	LATITUDE:              GetAddress().Latitude,
-	LONGITUDE:             GetAddress().Longitude,
-	PhoneNumber:           GetPhoner().PhoneNumber,
-	ChinaMobileNumber:     GetPhoner().ChinaMobileNumber,
-	TollFreeNumber:        GetPhoner().TollFreePhoneNumber,
-	E164PhoneNumberTag:    GetPhoner().E164PhoneNumber,
-	TitleMaleTag:          GetPerson().TitleMale,
-	TitleFemaleTag:        GetPerson().TitleFeMale,
-	FirstNameTag:          GetPerson().FirstName,
-	FirstNameMaleTag:      GetPerson().FirstNameMale,
-	FirstNameFemaleTag:    GetPerson().FirstNameFemale,
-	LastNameTag:           GetPerson().LastName,
-	NAME:                  GetPerson().Name,
-	UnixTimeTag:           GetDateTimer().UnixTime,
-	DATE:                  GetDateTimer().Date,
-	TIME:                  GetDateTimer().Time,
-	MonthNameTag:          GetDateTimer().MonthName,
-	YEAR:                  GetDateTimer().Year,
-	DayOfWeekTag:          GetDateTimer().DayOfWeek,
-	DayOfMonthTag:         GetDateTimer().DayOfMonth,
-	TIMESTAMP:             GetDateTimer().Timestamp,
-	CENTURY:               GetDateTimer().Century,
-	TIMEZONE:              GetDateTimer().TimeZone,
-	TimePeriodTag:         GetDateTimer().TimePeriod,
-	WORD:                  GetLorem().Word,
-	SENTENCE:              GetLorem().Sentence,
-	PARAGRAPH:             GetLorem().Paragraph,
-	CurrencyTag:           GetPrice().Currency,
-	AmountTag:             GetPrice().Amount,
-	AmountWithCurrencyTag: GetPrice().AmountWithCurrency,
-	ID:                    GetIdentifier().Digit,
-	HyphenatedID:          GetIdentifier().Hyphenated,
-	Regex:                 GetRegex().Gen,
-	Enum:                  GetEnum().Gen,
+	EmailTag:              internet.Email,
+	MacAddressTag:         internet.MacAddress,
+	DomainNameTag:         internet.DomainName,
+	URLTag:                internet.URL,
+	UserNameTag:           internet.UserName,
+	IPV4Tag:               internet.IPv4,
+	IPV6Tag:               internet.IPv6,
+	PASSWORD:              internet.Password,
+	CreditCardType:        pay.CreditCardType,
+	CreditCardNumber:      pay.CreditCardNumber,
+	LATITUDE:              address.Latitude,
+	LONGITUDE:             address.Longitude,
+	PhoneNumber:           phone.PhoneNumber,
+	ChinaMobileNumber:     phone.ChinaMobileNumber,
+	TollFreeNumber:        phone.TollFreePhoneNumber,
+	E164PhoneNumberTag:    phone.E164PhoneNumber,
+	TitleMaleTag:          person.TitleMale,
+	TitleFemaleTag:        person.TitleFeMale,
+	FirstNameTag:          person.FirstName,
+	FirstNameMaleTag:      person.FirstNameMale,
+	FirstNameFemaleTag:    person.FirstNameFemale,
+	LastNameTag:           person.LastName,
+	NAME:                  person.Name,
+	UnixTimeTag:           date.UnixTime,
+	DATE:                  date.Date,
+	TIME:                  date.Time,
+	MonthNameTag:          date.MonthName,
+	YEAR:                  date.Year,
+	DayOfWeekTag:          date.DayOfWeek,
+	DayOfMonthTag:         date.DayOfMonth,
+	TIMESTAMP:             date.Timestamp,
+	CENTURY:               date.Century,
+	TIMEZONE:              date.TimeZone,
+	TimePeriodTag:         date.TimePeriod,
+	WORD:                  lorem.Word,
+	SENTENCE:              lorem.Sentence,
+	PARAGRAPH:             lorem.Paragraph,
+	CurrencyTag:           pri.Currency,
+	AmountTag:             pri.Amount,
+	AmountWithCurrencyTag: pri.AmountWithCurrency,
+	ID:                    identifier.Digit,
+	HyphenatedID:          identifier.Hyphenated,
+	Regex:                 regexer.Gen,
+	Enum:                  enumer.Gen,
 }
 
 // Generic Error Messages for tags
-// 		ErrUnsupportedKindPtr: Error when get fake from ptr
-// 		ErrUnsupportedKind: Error on passing unsupported kind
 // 		ErrValueNotPtr: Error when value is not pointer
 // 		ErrTagNotSupported: Error when tag is not supported
 // 		ErrTagAlreadyExists: Error when tag exists and call AddProvider
-// 		ErrMoreArguments: Error on passing more arguments
 // 		ErrNotSupportedPointer: Error when passing unsupported pointer
 var (
-	ErrUnsupportedKindPtr  = "Unsupported kind: %s Change Without using * (pointer) in Field of %s"
-	ErrUnsupportedKind     = "Unsupported kind: %s"
 	ErrValueNotPtr         = "Not a pointer value"
 	ErrTagNotSupported     = "Tag unsupported"
 	ErrTagAlreadyExists    = "Tag exists"
-	ErrMoreArguments       = "Passed more arguments than is possible : (%d)"
 	ErrNotSupportedPointer = "Use sample:=new(%s)\n faker.Fake(sample) instead"
 	ErrSmallerThanZero     = "Size:%d is smaller than zero."
 
@@ -425,11 +374,11 @@ func getValue(a interface{}) (reflect.Value, error) {
 		res := randomString(randomStringLen)
 		return reflect.ValueOf(res), nil
 	case reflect.Array, reflect.Slice:
-		len := randomSliceAndMapSize()
-		if shouldSetNil && len == 0 {
+		l := randomSliceAndMapSize()
+		if shouldSetNil && l == 0 {
 			return reflect.Zero(t), nil
 		}
-		v := reflect.MakeSlice(t, len, len)
+		v := reflect.MakeSlice(t, l, l)
 		for i := 0; i < v.Len(); i++ {
 			val, err := getValue(v.Index(i).Interface())
 			if err != nil {
@@ -467,12 +416,12 @@ func getValue(a interface{}) (reflect.Value, error) {
 		return reflect.ValueOf(uint64(randomInteger())), nil
 
 	case reflect.Map:
-		len := randomSliceAndMapSize()
-		if shouldSetNil && len == 0 {
+		l := randomSliceAndMapSize()
+		if shouldSetNil && l == 0 {
 			return reflect.Zero(t), nil
 		}
 		v := reflect.MakeMap(t)
-		for i := 0; i < len; i++ {
+		for i := 0; i < l; i++ {
 			keyInstance := reflect.New(t.Key()).Elem().Interface()
 			key, err := getValue(keyInstance)
 			if err != nil {
@@ -594,23 +543,20 @@ func setDataWithTag(v reflect.Value, tag Tag) error {
 		if !exist {
 			return errors.New(ErrTagNotSupported)
 		}
-		if _, def := defaultTag[mapperName]; !def {
-			res, err := invoke(mapper, v, tag)
-			if err != nil {
-				return err
-			}
-			v.Set(reflect.ValueOf(res))
-			return nil
-		}
 
-		t := v.Type()
-		newv := reflect.New(t.Elem())
+		newv := reflect.New(v.Type().Elem())
 		res, err := invoke(mapper, newv.Elem(), tag)
 		if err != nil {
 			return err
 		}
-		rval := reflect.ValueOf(res)
-		newv.Elem().Set(rval)
+
+		resV := reflect.ValueOf(res)
+		if resV.Kind() == reflect.Ptr {
+			v.Set(resV)
+			return nil
+		}
+
+		newv.Elem().Set(resV)
 		v.Set(newv)
 		return nil
 	case reflect.String:
@@ -636,13 +582,13 @@ func setDataWithTag(v reflect.Value, tag Tag) error {
 }
 
 func userDefinedMap(v reflect.Value, tag Tag) error {
-	len := randomSliceAndMapSize()
-	if shouldSetNil && len == 0 {
+	l := randomSliceAndMapSize()
+	if shouldSetNil && l == 0 {
 		v.Set(reflect.Zero(v.Type()))
 		return nil
 	}
 	definedMap := reflect.MakeMap(v.Type())
-	for i := 0; i < len; i++ {
+	for i := 0; i < l; i++ {
 		key, err := getValueWithTag(v.Type().Key(), tag)
 		if err != nil {
 			return err
@@ -678,13 +624,13 @@ func getValueWithTag(t reflect.Type, tag Tag) (interface{}, error) {
 }
 
 func userDefinedArray(v reflect.Value, tag Tag) error {
-	len := randomSliceAndMapSize()
-	if shouldSetNil && len == 0 {
+	l := randomSliceAndMapSize()
+	if shouldSetNil && l == 0 {
 		v.Set(reflect.Zero(v.Type()))
 		return nil
 	}
-	array := reflect.MakeSlice(v.Type(), len, len)
-	for i := 0; i < len; i++ {
+	array := reflect.MakeSlice(v.Type(), l, l)
+	for i := 0; i < l; i++ {
 		res, err := getValueWithTag(v.Type().Elem(), tag)
 		if err != nil {
 			return err
@@ -750,11 +696,11 @@ func extractStringFromTag(tag Tag) (interface{}, error) {
 	if !strings.Contains(tag.RawTag, Length) {
 		return nil, errors.New(ErrTagNotSupported)
 	}
-	len, err := extractNumberFromText(tag.RawTag)
+	l, err := extractNumberFromText(tag.RawTag)
 	if err != nil {
 		return nil, err
 	}
-	res := randomString(len)
+	res := randomString(l)
 	return res, nil
 }
 
@@ -872,27 +818,12 @@ func randomStringNumber(n int) string {
 	return string(b)
 }
 
-// RandomInt Get three parameters , only first mandatory and the rest are optional
-// 		If only set one parameter :  This means the minimum number of digits and the total number
-// 		If only set two parameters : First this is min digit and second max digit and the total number the difference between them
-// 		If only three parameters: the third argument set Max count Digit
-func RandomInt(parameters ...int) (p []int, err error) {
-	switch len(parameters) {
-	case 1:
-		minCount := parameters[0]
-		p = rand.Perm(minCount)
-		for i := range p {
-			p[i] += minCount
-		}
-	case 2:
-		minDigit, maxDigit := parameters[0], parameters[1]
-		p = rand.Perm(maxDigit - minDigit + 1)
+// RandomInt generates digits with len between minDigit and maxDigit
+func RandomInt(minDigit, maxDigit int) []int {
+	p := rand.Perm(maxDigit - minDigit + 1)
 
-		for i := range p {
-			p[i] += minDigit
-		}
-	default:
-		err = fmt.Errorf(ErrMoreArguments, len(parameters))
+	for i := range p {
+		p[i] += minDigit
 	}
-	return p, err
+	return p
 }

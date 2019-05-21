@@ -14,21 +14,10 @@ type Enumer interface {
 	Gen(v reflect.Value, tag Tag) (interface{}, error)
 }
 
-var enumer Enumer
+var enumer Enumer = &EnumImpl{}
 
 // EnumImpl defines the struct
 type EnumImpl struct {
-}
-
-// GetEnum returns a new Enumer interface of EnumImpl struct
-func GetEnum() Enumer {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if enumer == nil {
-		enumer = &EnumImpl{}
-	}
-	return enumer
 }
 
 // Gen generates an enum value specified in the field tag.

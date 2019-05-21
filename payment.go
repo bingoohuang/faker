@@ -27,20 +27,9 @@ var creditCards = map[string]creditCard{
 	"diners club":      {"Diners Club", 14, []int{36, 38, 39}},
 }
 
-var pay Render
+var pay Render = &Payment{}
 
 var cacheCreditCard string
-
-// GetPayment returns a new Render interface of Payment struct
-func GetPayment() Render {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if pay == nil {
-		pay = &Payment{}
-	}
-	return pay
-}
 
 // SetPayment set custom Network
 func SetPayment(p Render) {

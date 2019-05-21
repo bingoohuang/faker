@@ -12,7 +12,7 @@ func TestSetDateTimer(t *testing.T) {
 }
 
 func TestUnixTimeValueValid(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	var ref = struct {
 		some int64
 	}{
@@ -29,7 +29,7 @@ func TestUnixTimeValueValid(t *testing.T) {
 }
 
 func TestDate(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	date, err := d.Date(reflect.Value{})
 	if err != nil {
 		t.Error("function Date need return valid value")
@@ -42,7 +42,7 @@ func TestDate(t *testing.T) {
 }
 
 func TestTime(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	tm, err := d.Time(reflect.Value{})
 	if err != nil {
 		t.Error("function Time need return valid value")
@@ -54,7 +54,7 @@ func TestTime(t *testing.T) {
 }
 
 func TestMonthName(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	mt, err := d.MonthName(reflect.Value{})
 	if err != nil {
 		t.Error("function Month need return valid month")
@@ -66,7 +66,7 @@ func TestMonthName(t *testing.T) {
 }
 
 func TestYear(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	year, err := d.Year(reflect.Value{})
 	if err != nil {
 		t.Error("function Year need return valid year")
@@ -78,7 +78,7 @@ func TestYear(t *testing.T) {
 }
 
 func TestDayOfWeek(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	week, err := d.DayOfWeek(reflect.Value{})
 	if err != nil {
 		t.Error("function DayOfWeek need return valid day")
@@ -93,7 +93,7 @@ func TestDayOfWeekReturnsDifferentValues(t *testing.T) {
 	dayMap := make(map[string]struct{})
 	iterations := 5 // sufficiently large to assure we don't randomly get the same value again
 	for i := 0; i < iterations; i++ {
-		day, err := GetDateTimer().DayOfWeek(reflect.Value{})
+		day, err := date.DayOfWeek(reflect.Value{})
 		if err != nil {
 			t.Error("function DayOfWeek need return valid day")
 		}
@@ -112,7 +112,7 @@ func TestDayOfWeekReturnsDifferentValues(t *testing.T) {
 }
 
 func TestDayOfMonth(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	mt, err := d.DayOfMonth(reflect.Value{})
 	if err != nil {
 		t.Error("function DayOfMonth need return valid digit")
@@ -124,7 +124,7 @@ func TestDayOfMonth(t *testing.T) {
 }
 
 func TestTimestamp(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	tstmp, err := d.Timestamp(reflect.Value{})
 	if err != nil {
 		t.Error("function Timestamp need return valid timestamp format")
@@ -136,7 +136,7 @@ func TestTimestamp(t *testing.T) {
 }
 
 func TestCentury(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	centry, err := d.Century(reflect.Value{})
 	if err != nil {
 		t.Error("Expected century from functuon Century")
@@ -147,7 +147,7 @@ func TestCentury(t *testing.T) {
 }
 
 func TestTimeZone(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	tz, err := d.TimeZone(reflect.Value{})
 	if err != nil {
 		t.Error("Expected timezone from variable timezones")
@@ -158,7 +158,7 @@ func TestTimeZone(t *testing.T) {
 }
 
 func TestTimePeriod(t *testing.T) {
-	d := GetDateTimer()
+	d := date
 	periode, err := d.TimePeriod(reflect.Value{})
 	if err != nil {
 		t.Error("function TimePeriod need return valid period")
