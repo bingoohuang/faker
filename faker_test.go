@@ -2,6 +2,7 @@ package faker
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"reflect"
 	"testing"
@@ -720,6 +721,16 @@ type Student struct {
 }
 type School struct {
 	Location string
+}
+
+type Group struct {
+	Mobiles []string `faker:"china_mobile_number"`
+}
+
+func TestGroup(t *testing.T) {
+	var g Group
+	err := Fake(&g)
+	assert.Nil(t, err)
 }
 
 func TestExtend(t *testing.T) {

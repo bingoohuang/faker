@@ -140,15 +140,7 @@ var defaultTag = map[string]string{
 // This type also can be used for custom provider.
 type TaggedFunction func(v reflect.Value) (interface{}, error)
 
-func (r TaggedFunction) Do(v reflect.Value, tag FakerTag) (interface{}, error) {
-	return r(v)
-}
-
 type TaggedFunctionV2 func(v reflect.Value, tag FakerTag) (interface{}, error)
-
-func (r TaggedFunctionV2) Do(v reflect.Value, tag FakerTag) (interface{}, error) {
-	return r(v, tag)
-}
 
 var mapperTag = map[string]interface{}{
 	EmailTag:              GetNetworker().Email,
@@ -743,6 +735,11 @@ func userDefinedNumber(v reflect.Value, tag FakerTag) error {
 }
 
 func extractStringFromTag(tag FakerTag) (interface{}, error) {
+	if fn, ok := mapperTag[tag.Mapper]; ok {
+		res, err := invoke(fn, reflect.ValueOf(nil), tag)
+		return res, err
+	}
+
 	if !strings.Contains(tag.RawTag, Length) {
 		return nil, errors.New(ErrTagNotSupported)
 	}
