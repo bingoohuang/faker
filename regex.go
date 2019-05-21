@@ -32,6 +32,5 @@ func (r RegexImpl) Gen(v reflect.Value, tag FakerTag) (interface{}, error) {
 	if l, ok := tag.Opts["len"]; ok {
 		len, _ = strconv.Atoi(l)
 	}
-	val, err := reggen.Generate(tag.Opts["regex"], len)
-	return val, err
+	return reggen.Generate(tag.Opts["regex"], len)
 }

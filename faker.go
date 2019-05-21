@@ -44,6 +44,7 @@ const (
 	ID                    = "uuid_digit"
 	HyphenatedID          = "uuid_hyphenated"
 	Regex                 = "regex"
+	Enum                  = "enum"
 	EmailTag              = "email"
 	MacAddressTag         = "mac_address"
 	DomainNameTag         = "domain_name"
@@ -186,6 +187,7 @@ var mapperTag = map[string]interface{}{
 	ID:                    GetIdentifier().Digit,
 	HyphenatedID:          GetIdentifier().Hyphenated,
 	Regex:                 GetRegex().Gen,
+	Enum:                  GetEnum().Gen,
 }
 
 // Generic Error Messages for tags
@@ -752,6 +754,11 @@ func extractStringFromTag(tag FakerTag) (interface{}, error) {
 }
 
 func extractNumberFromTag(fakerTag FakerTag, t reflect.Type) (interface{}, error) {
+	if fn, ok := mapperTag[fakerTag.Mapper]; ok {
+		res, err := invoke(fn, reflect.New(t), fakerTag)
+		return res, err
+	}
+
 	tag := fakerTag.RawTag
 	if !(strings.Contains(tag, BoundaryStart) && strings.Contains(tag, BoundaryEnd)) {
 		return nil, errors.New(ErrTagNotSupported)

@@ -158,8 +158,16 @@ type CStruct struct {
 }
 
 type TaggedStruct struct {
-	Regex2             string  `faker:"regex=\\d+,len=10"`
-	Regex              string  `faker:"regex=\\d{15}"`
+	Enums1 []int    `faker:"enum=1/2/3"`
+	Enums2 []string `faker:"enum=x/y/z"`
+	Enum1  int      `faker:"enum=4/5/6"`
+	Enum2  string   `faker:"enum=a/b/c"`
+	Regex2 string   `faker:"regex=\\d+,len=10"`
+	Regex  string   `faker:"regex=\\d{15}"`
+
+	RegexArr2 []string `faker:"regex=\\d+,len=10"`
+	RegexArr  []string `faker:"regex=\\d{15}"`
+
 	Latitude           float32 `faker:"lat"`
 	Longitude          float32 `faker:"long"`
 	CreditCardNumber   string  `faker:"cc_number"`
@@ -206,8 +214,14 @@ type TaggedStruct struct {
 
 func (t TaggedStruct) String() string {
 	return fmt.Sprintf(`{
-Regex: %s,
-Regex2: %s,
+	Enums1: %v,
+	Enums2: %v,
+	Enum1: %d,
+	Enum2: %s,
+	RegexArr2: %v,
+	RegexArr: %v,
+	Regex: %s,
+	Regex2: %s,
 	Latitude: %f,
 	Long: %f,
 	CreditCardNumber: %s,
@@ -251,7 +265,8 @@ Regex2: %s,
 	HyphenatedID: %s,
 	ID: %s,
 	
-}`, t.Regex, t.Regex2, t.Latitude, t.Longitude, t.CreditCardNumber,
+}`, t.Enums1, t.Enums2, t.Enum1, t.Enum2, t.RegexArr2, t.RegexArr, t.Regex,
+		t.Regex2, t.Latitude, t.Longitude, t.CreditCardNumber,
 		t.CreditCardType, t.Email, t.DomainName, t.IPV4,
 		t.IPV6, t.Password, t.PhoneNumber, t.ChinaMobileNumber, t.MacAddress,
 		t.URL, t.UserName, t.TollFreeNumber,
