@@ -152,7 +152,7 @@ var mapperTag = map[string]interface{}{
 // 		ErrTagNotSupported: Error when tag is not supported
 // 		ErrTagAlreadyExists: Error when tag exists and call AddProvider
 // 		ErrNotSupportedPointer: Error when passing unsupported pointer
-var (
+const (
 	ErrValueNotPtr         = "Not a pointer value"
 	ErrTagNotSupported     = "Tag unsupported"
 	ErrTagAlreadyExists    = "Tag exists"
@@ -332,7 +332,8 @@ func getValue(a interface{}) (reflect.Value, error) {
 				if !v.Field(i).CanSet() {
 					continue // to avoid panic to set on unexported field in struct
 				}
-				tags := decodeTags(t, i)
+				//tags := decodeTags(t, i)
+				tags := decodeTags(t.Field(i).Tag.Get(tagName), t.Field(i).Type)
 				switch {
 				case tags.KeepOriginal:
 					zero, err := isZero(reflect.ValueOf(a).Field(i))
@@ -452,9 +453,10 @@ func isZero(field reflect.Value) (bool, error) {
 	return reflect.Zero(field.Type()).Interface() == field.Interface(), nil
 }
 
-func decodeTags(typ reflect.Type, i int) Tag {
-	field := typ.Field(i)
-	rawTag := field.Tag.Get(tagName)
+//func decodeTags(typ reflect.Type, i int) Tag {
+func decodeTags(rawTag string, typ reflect.Type) Tag {
+	//field := typ.Field(i)
+	//rawTag := field.Tag.Get(tagName)
 	tags := strings.Split(rawTag, ",")
 
 	keepOriginal := false
@@ -491,8 +493,7 @@ func decodeTags(typ reflect.Type, i int) Tag {
 
 	return Tag{
 		RawTag:       rawTag,
-		FieldName:    field.Name,
-		Type:         field.Type,
+		Type:         typ,
 		Mapper:       mapper,
 		Opts:         opts,
 		KeepOriginal: keepOriginal,
@@ -502,7 +503,6 @@ func decodeTags(typ reflect.Type, i int) Tag {
 // Tag represents tag of faker related to the struct field
 type Tag struct {
 	Type         reflect.Type
-	FieldName    string
 	RawTag       string
 	Mapper       string
 	Opts         map[string]string
