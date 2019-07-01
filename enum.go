@@ -62,6 +62,8 @@ func (r EnumImpl) Gen(v reflect.Value, tag Tag) (interface{}, error) {
 		return cast.ToFloat32E(randVal)
 	case reflect.Float64:
 		return cast.ToFloat64E(randVal)
+	case reflect.Interface:
+		return randVal, nil
 	default:
 		return nil, fmt.Errorf("unknown type %v", tag.Type)
 	}
