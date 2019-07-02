@@ -1,10 +1,11 @@
 package faker
 
 import (
-	"github.com/stretchr/testify/assert"
 	"reflect"
 	"regexp"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFakeColumnWithTag(t *testing.T) {
@@ -12,8 +13,8 @@ func TestFakeColumnWithTag(t *testing.T) {
 
 	assert.Equal(t, reflect.TypeOf(s), reflect.TypeOf(""))
 
-	assert.Nil(t, FakeColumnWithTag(&s, "regex=\\d{15}"))
-	assert.True(t, regexp.MustCompile("\\d{15}").MatchString(s.(string)))
+	assert.Nil(t, FakeColumnWithTag(&s, `regex=\d{15}`))
+	assert.True(t, regexp.MustCompile(`\d{15}`).MatchString(s.(string)))
 
 	x := interface{}("")
 	assert.Nil(t, FakeColumnWithTag(&x, "enum=0/1"))

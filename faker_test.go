@@ -159,6 +159,8 @@ type CStruct struct {
 }
 
 type TaggedStruct struct {
+	Snow0  int64    `faker:"snow"`
+	Snow1  string   `faker:"snow,format=base64"`
 	Enums1 []int    `faker:"enum=1/2/3"`
 	Enums2 []string `faker:"enum=x/y/z"`
 	Enum1  int      `faker:"enum=4/5/6"`
@@ -215,6 +217,8 @@ type TaggedStruct struct {
 
 func (t TaggedStruct) String() string {
 	return fmt.Sprintf(`{
+	Snow0: %v,
+	Snow1: %v,
 	Enums1: %v,
 	Enums2: %v,
 	Enum1: %d,
@@ -266,7 +270,7 @@ func (t TaggedStruct) String() string {
 	HyphenatedID: %s,
 	ID: %s,
 	
-}`, t.Enums1, t.Enums2, t.Enum1, t.Enum2, t.RegexArr2, t.RegexArr, t.Regex,
+}`, t.Snow0, t.Snow1, t.Enums1, t.Enums2, t.Enum1, t.Enum2, t.RegexArr2, t.RegexArr, t.Regex,
 		t.Regex2, t.Latitude, t.Longitude, t.CreditCardNumber,
 		t.CreditCardType, t.Email, t.DomainName, t.IPV4,
 		t.IPV6, t.Password, t.PhoneNumber, t.ChinaMobileNumber, t.MacAddress,
@@ -313,7 +317,12 @@ func TestFakerData(t *testing.T) {
 	fmt.Printf("%+v\n", b)
 
 	// Example Result :
-	// {Int:8906957488773767119 Int8:6 Int16:14 Int32:391219825 Int64:2374447092794071106 String:poraKzAxVbWVkMkpcZCcWlYMd Bool:false SString:[MehdV aVotHsi] SInt:[528955241289647236 7620047312653801973 2774096449863851732] SInt8:[122 -92 -92] SInt16:[15679 -19444 -30246] SInt32:[1146660378 946021799 852909987] SInt64:[6079203475736033758 6913211867841842836 3269201978513619428] SFloat32:[0.019562425 0.12729558 0.36450312] SFloat64:[0.7825838989890364 0.9732903338838912 0.8316541489234004] SBool:[true false true] Struct:{Number:7693944638490551161 Height:6513508020379591917}}
+	// {Int:8906957488773767119 Int8:6 Int16:14 Int32:391219825 Int64:2374447092794071106
+	// String:poraKzAxVbWVkMkpcZCcWlYMd Bool:false SString:[MehdV aVotHsi] SInt:[528955241289647236
+	// 7620047312653801973 2774096449863851732] SInt8:[122 -92 -92] SInt16:[15679 -19444 -30246]
+	// SInt32:[1146660378 946021799 852909987] SInt64:[6079203475736033758 6913211867841842836 3269201978513619428]
+	// SFloat32:[0.019562425 0.12729558 0.36450312] SFloat64:[0.7825838989890364 0.9732903338838912 0.8316541489234004]
+	// SBool:[true false true] Struct:{Number:7693944638490551161 Height:6513508020379591917}}
 
 }
 

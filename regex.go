@@ -7,16 +7,15 @@ import (
 	"github.com/lucasjones/reggen"
 )
 
-// Regexer interface
-type Regexer interface {
+// GenV2 interface
+type GenV2 interface {
 	Gen(v reflect.Value, tag Tag) (interface{}, error)
 }
 
-var regexer Regexer = &RegexImpl{}
+var regexer GenV2 = &RegexImpl{}
 
 // RegexImpl struct
-type RegexImpl struct {
-}
+type RegexImpl struct{}
 
 // Gen returns the fake value the matches the regex
 func (r RegexImpl) Gen(v reflect.Value, tag Tag) (interface{}, error) {

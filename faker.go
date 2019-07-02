@@ -44,6 +44,7 @@ const (
 	HyphenatedID          = "uuid_hyphenated"
 	Regex                 = "regex"
 	Enum                  = "enum"
+	Snow                  = "snow"
 	EmailTag              = "email"
 	MacAddressTag         = "mac_address"
 	DomainNameTag         = "domain_name"
@@ -145,6 +146,7 @@ var mapperTag = map[string]interface{}{
 	HyphenatedID:          identifier.Hyphenated,
 	Regex:                 regexer.Gen,
 	Enum:                  enumer.Gen,
+	Snow:                  snow.Gen,
 }
 
 // Generic Error Messages for tags
@@ -153,12 +155,11 @@ var mapperTag = map[string]interface{}{
 // 		ErrTagAlreadyExists: Error when tag exists and call AddProvider
 // 		ErrNotSupportedPointer: Error when passing unsupported pointer
 const (
-	ErrValueNotPtr         = "Not a pointer value"
-	ErrTagNotSupported     = "Tag unsupported"
-	ErrTagAlreadyExists    = "Tag exists"
-	ErrNotSupportedPointer = "Use sample:=new(%s)\n faker.Fake(sample) instead"
-	ErrSmallerThanZero     = "Size:%d is smaller than zero."
-
+	ErrValueNotPtr             = "Not a pointer value"
+	ErrTagNotSupported         = "Tag unsupported"
+	ErrTagAlreadyExists        = "Tag exists"
+	ErrNotSupportedPointer     = "Use sample:=new(%s)\n faker.Fake(sample) instead"
+	ErrSmallerThanZero         = "Size:%d is smaller than zero."
 	ErrStartValueBiggerThanEnd = "Start value can not be bigger than end value."
 	ErrWrongFormattedTag       = "Tag \"%s\" is not written properly"
 	ErrUnknownType             = "Unknown Type"

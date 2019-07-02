@@ -9,16 +9,10 @@ import (
 	"github.com/spf13/cast"
 )
 
-// Enumer defines the interface of enum value generator
-type Enumer interface {
-	Gen(v reflect.Value, tag Tag) (interface{}, error)
-}
-
-var enumer Enumer = &EnumImpl{}
+var enumer GenV2 = &EnumImpl{}
 
 // EnumImpl defines the struct
-type EnumImpl struct {
-}
+type EnumImpl struct{}
 
 // Gen generates an enum value specified in the field tag.
 func (r EnumImpl) Gen(v reflect.Value, tag Tag) (interface{}, error) {
