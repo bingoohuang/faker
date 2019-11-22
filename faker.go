@@ -155,15 +155,15 @@ var mapperTag = map[string]interface{}{
 // 		ErrTagAlreadyExists: Error when tag exists and call AddProvider
 // 		ErrNotSupportedPointer: Error when passing unsupported pointer
 const (
-	ErrValueNotPtr             = "Not a pointer value"
-	ErrTagNotSupported         = "Tag unsupported"
-	ErrTagAlreadyExists        = "Tag exists"
-	ErrNotSupportedPointer     = "Use sample:=new(%s)\n faker.Fake(sample) instead"
-	ErrSmallerThanZero         = "Size:%d is smaller than zero."
-	ErrStartValueBiggerThanEnd = "Start value can not be bigger than end value."
-	ErrWrongFormattedTag       = "Tag \"%s\" is not written properly"
-	ErrUnknownType             = "Unknown Type"
-	ErrNotSupportedTypeForTag  = "Type is not supported by tag."
+	ErrValueNotPtr             = "not a pointer value"
+	ErrTagNotSupported         = "tag unsupported"
+	ErrTagAlreadyExists        = "tag exists"
+	ErrNotSupportedPointer     = "use sample:=new(%s) faker.Fake(sample) instead"
+	ErrSmallerThanZero         = "size:%d is smaller than zero"
+	ErrStartValueBiggerThanEnd = "start value can not be bigger than end value"
+	ErrWrongFormattedTag       = "tag \"%s\" is not written properly"
+	ErrUnknownType             = "unknown Type"
+	ErrNotSupportedTypeForTag  = "type is not supported by tag"
 )
 
 func init() {
@@ -231,7 +231,7 @@ func Fake(a interface{}) error {
 	return nil
 }
 
-// AddProvider extend faker with tag to generate fake data with specified custom algoritm
+// AddProvider extend faker with tag to generate fake data with specified custom algorithm
 // Example:
 // 		type Gondoruwo struct {
 // 			Name       string
@@ -284,8 +284,8 @@ func AddProvider(tag string, provider TaggedFunction) error {
 	return nil
 }
 
-// AddProviderV2 extend faker with tag to generate fake data with specified custom algoritm.
-// It is similar to AddProvider but with a differnt provider type.
+// AddProviderV2 extend faker with tag to generate fake data with specified custom algorithm.
+// It is similar to AddProvider but with a different provider type.
 func AddProviderV2(tag string, provider TaggedFunctionV2) error {
 	if _, ok := mapperTag[tag]; ok {
 		return errors.New(ErrTagAlreadyExists)
@@ -367,8 +367,8 @@ func getValue(a interface{}) (reflect.Value, error) {
 						return reflect.Value{}, err
 					}
 				}
-
 			}
+
 			return v, nil
 		}
 
@@ -442,7 +442,6 @@ func getValue(a interface{}) (reflect.Value, error) {
 		err := fmt.Errorf("no support for kind %+v", t)
 		return reflect.Value{}, err
 	}
-
 }
 
 func isZero(field reflect.Value) (bool, error) {
@@ -705,19 +704,19 @@ func extractStringFromTag(tag Tag) (interface{}, error) {
 	return res, nil
 }
 
-func extractNumberFromTag(Tag Tag, t reflect.Type) (interface{}, error) {
-	if fn, ok := mapperTag[Tag.Mapper]; ok {
-		res, err := invoke(fn, reflect.New(t), Tag)
+func extractNumberFromTag(tag Tag, t reflect.Type) (interface{}, error) {
+	if fn, ok := mapperTag[tag.Mapper]; ok {
+		res, err := invoke(fn, reflect.New(t), tag)
 		return res, err
 	}
 
-	tag := Tag.RawTag
-	if !(strings.Contains(tag, BoundaryStart) && strings.Contains(tag, BoundaryEnd)) {
+	rawTag := tag.RawTag
+	if !(strings.Contains(rawTag, BoundaryStart) && strings.Contains(rawTag, BoundaryEnd)) {
 		return nil, errors.New(ErrTagNotSupported)
 	}
-	valuesStr := strings.SplitN(tag, comma, -1)
+	valuesStr := strings.SplitN(rawTag, comma, -1)
 	if len(valuesStr) != 2 {
-		return nil, fmt.Errorf(ErrWrongFormattedTag, tag)
+		return nil, fmt.Errorf(ErrWrongFormattedTag, rawTag)
 	}
 	startBoundary, err := extractNumberFromText(valuesStr[0])
 	if err != nil {

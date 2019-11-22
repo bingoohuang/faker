@@ -32,8 +32,8 @@ type SomeStruct struct {
 	UInt64 uint64
 
 	Latitude           float32 `faker:"lat"`
-	LATITUDE           float64 `faker:"lat"`
 	Long               float32 `faker:"long"`
+	LATITUDE           float64 `faker:"lat"`
 	LONG               float64 `faker:"long"`
 	StringValue        string
 	CreditCardType     string `faker:"cc_type"`
@@ -323,7 +323,6 @@ func TestFakerData(t *testing.T) {
 	// SInt32:[1146660378 946021799 852909987] SInt64:[6079203475736033758 6913211867841842836 3269201978513619428]
 	// SFloat32:[0.019562425 0.12729558 0.36450312] SFloat64:[0.7825838989890364 0.9732903338838912 0.8316541489234004]
 	// SBool:[true false true] Struct:{Number:7693944638490551161 Height:6513508020379591917}}
-
 }
 
 func TestUnsuportedMapStringInterface(t *testing.T) {
@@ -338,7 +337,7 @@ func TestUnsuportedMapStringInterface(t *testing.T) {
 
 func TestSetDataIfArgumentNotPtr(t *testing.T) {
 	temp := struct{}{}
-	if "Not a pointer value" != Fake(temp).Error() {
+	if Fake(temp).Error() != "Not a pointer value" {
 		t.Error("Expected in arguments not ptr")
 	}
 }
@@ -479,11 +478,13 @@ func TestBoundaryAndLen(t *testing.T) {
 		if err := validateLen(someStruct.SString); err != nil {
 			t.Error(err)
 		}
+
 		for _, str := range someStruct.ASString {
 			if err := validateLen(str); err != nil {
 				t.Error(err)
 			}
 		}
+
 		for k, v := range someStruct.MSString {
 			if err := validateLen(k); err != nil {
 				t.Error(err)
@@ -492,6 +493,7 @@ func TestBoundaryAndLen(t *testing.T) {
 				t.Error(err)
 			}
 		}
+
 		for k, v := range someStruct.MIint {
 			if err := validateRange(k); err != nil {
 				t.Error(err)
@@ -648,7 +650,6 @@ func TestCustomType(t *testing.T) {
 		t.Error("Expected Not Error, But Got: ", err)
 	}
 	fmt.Printf(" A value: %+v , Somestruct Value: %+v  ", a, a)
-
 }
 
 type SampleStruct struct {
@@ -699,7 +700,6 @@ func TestPointerToCustomIntStruct(t *testing.T) {
 
 func TestSkipField(t *testing.T) {
 	// This test is to ensure that the faker won't fill field with tag skip
-
 	a := struct {
 		ID                    int
 		ShouldBeSkipped       int `faker:"-"`
@@ -721,7 +721,6 @@ func TestSkipField(t *testing.T) {
 	if a.ShouldBeSkippedFilled != 10 {
 		t.Error("Expected that field will be skipped")
 	}
-
 }
 
 type Student struct {
@@ -744,7 +743,6 @@ func TestGroup(t *testing.T) {
 
 func TestExtend(t *testing.T) {
 	// This test is to ensure that faker can be extended new providers
-
 	t.Run("test-string", func(t *testing.T) {
 		a := struct {
 			ID     string `faker:"test"`
@@ -779,7 +777,6 @@ func TestExtend(t *testing.T) {
 	t.Run("test-struct", func(t *testing.T) {
 		a := &Student{}
 		err := AddProvider("custom-school", func(v reflect.Value) (interface{}, error) {
-
 			sch := School{
 				Location: "North Kindom",
 			}
@@ -801,7 +798,6 @@ func TestExtend(t *testing.T) {
 			t.Error("ID should be equal test value")
 		}
 	})
-
 }
 
 func TestTagAlreadyExists(t *testing.T) {
@@ -840,24 +836,24 @@ func TestTagWithPointer(t *testing.T) {
 
 	//Assert
 	if sample.FirstName == nil || *sample.FirstName == "" {
-		t.Error("Expected filled but got emtpy")
+		t.Error("Expected filled but got empty")
 	}
 	if sample.Email == nil || *sample.Email == "" {
-		t.Error("Expected filled but got emtpy")
+		t.Error("Expected filled but got empty")
 	}
 	if sample.Latitude == nil || *sample.Latitude == 0 {
-		t.Error("Expected filled but got emtpy")
+		t.Error("Expected filled but got empty")
 	}
 	if sample.Latitude32 == nil || *sample.Latitude32 == 0 {
-		t.Error("Expected filled but got emtpy")
+		t.Error("Expected filled but got empty")
 	}
 
 	if sample.UnixTime == nil || *sample.UnixTime == 0 {
-		t.Error("Expected filled but got emtpy")
+		t.Error("Expected filled but got empty")
 	}
 
 	if sample.School == nil || sample.School.Location == "" {
-		t.Error("Expected filled but got emtpy")
+		t.Error("Expected filled but got empty")
 	}
 }
 
@@ -922,7 +918,8 @@ func TestItThrowsAnErrorWhenKeepIsUsedOnIncomparableType(t *testing.T) {
 	withArray := TypeStructWithArray{}
 
 	for _, item := range []interface{}{withArray, withStruct, withMap, withSlice} {
-		err := Fake(&item)
+		item2 := item
+		err := Fake(&item2)
 		if err == nil {
 			t.Errorf("expected error, but got nil")
 		}

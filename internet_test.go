@@ -68,7 +68,6 @@ func TestUserName(t *testing.T) {
 	if usrname.(string) == "" {
 		t.Error("Expected get username")
 	}
-
 }
 func TestIPv4(t *testing.T) {
 	ip, err := internet.IPv4(reflect.Value{})

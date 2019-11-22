@@ -50,11 +50,12 @@ func (p Payment) cctype() string {
 	if cacheCreditCard != "" {
 		return cacheCreditCard
 	}
-	var ccTypes []string
+	ccTypes := make([]string, 0, n)
 
 	for _, cc := range creditCards {
 		ccTypes = append(ccTypes, cc.ccType)
 	}
+
 	cacheCreditCard = ccTypes[rand.Intn(n)]
 	return cacheCreditCard
 }

@@ -29,7 +29,6 @@ func TestHyphenated(t *testing.T) {
 	if match, err := regexp.Match(pattern, []byte(uuid.(string))); !match || err != nil {
 		t.Errorf("Could not match the UUID hyphenated format, err: %+v, match: %+v", err, match)
 	}
-
 }
 
 func TestGetIdentifier(t *testing.T) {

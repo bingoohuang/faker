@@ -27,7 +27,7 @@ func TestAmountWithCurrency(t *testing.T) {
 	}
 
 	if !strings.Contains(p.(string), " ") {
-		t.Error("Expected Price currency followed by a space and it's ammount")
+		t.Error("Expected Price currency followed by a space and it's amount")
 	}
 }
 
@@ -42,7 +42,7 @@ func TestFakeAmountWithCurrency(t *testing.T) {
 	p := AmountWithCurrency()
 
 	if !strings.Contains(p, " ") {
-		t.Error("Expected Price currency followed by a space and it's ammount")
+		t.Error("Expected Price currency followed by a space and it's amount")
 	}
 
 	arrCurrency := strings.Split(p, " ")
